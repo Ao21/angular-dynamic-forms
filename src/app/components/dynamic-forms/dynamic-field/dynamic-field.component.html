@@ -1,0 +1,109 @@
+<div
+  *ngIf="question && !isHidden"
+  [formGroup]="form"
+  [ngSwitch]="question.controlType"
+>
+  <mat-form-field [appearance]="question.appearance" *ngSwitchCase="'textbox'">
+    <mat-label>{{ question.label }}</mat-label>
+    <input
+      matInput
+      [min]="question.min"
+      [max]="question.max"
+      [autocomplete]="question.autocomplete"
+      [type]="question.type"
+      [formControlName]="question.key"
+      [placeholder]="question.placeholder"
+    />
+    <mat-hint *ngIf="question.hint">{{ question.hint }}</mat-hint>
+    <ng-container
+      *ngFor="let validation of question.validations"
+      ngProjectAs="mat-error"
+    >
+      <mat-error *ngIf="form.get(question.key).hasError(validation.name)">{{
+        validation.message
+      }}</mat-error>
+    </ng-container>
+  </mat-form-field>
+
+  <mat-form-field [appearance]="question.appearance" *ngSwitchCase="'dropdown'">
+    <mat-label>{{ question.label }}</mat-label>
+    <mat-select
+      [formControlName]="question.key"
+      [placeholder]="question.placeholder"
+    >
+      <mat-option
+        *ngFor="let option of question.options"
+        [value]="option.value"
+      >
+        {{ option.key }}
+      </mat-option>
+    </mat-select>
+    <mat-hint *ngIf="question.hint">{{ question.hint }}</mat-hint>
+    <ng-container
+      *ngFor="let validation of question.validations"
+      ngProjectAs="mat-error"
+    >
+      <mat-error *ngIf="form.get(question.key).hasError(validation.name)">{{
+        validation.message
+      }}</mat-error>
+    </ng-container>
+  </mat-form-field>
+
+  <mat-form-field [appearance]="question.appearance" *ngSwitchCase="'date'">
+    <mat-label>{{ question.label }}</mat-label>
+    <input
+      [min]="question.min"
+      [max]="question.max"
+      [formControlName]="question.key"
+      matInput
+      [matDatepicker]="picker"
+      [placeholder]="question.label"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-hint *ngIf="question.hint">{{ question.hint }}</mat-hint>
+    <ng-container
+      *ngFor="let validation of question.validations"
+      ngProjectAs="mat-error"
+    >
+      <mat-error *ngIf="form.get(question.key).hasError(validation.name)">{{
+        validation.message
+      }}</mat-error>
+    </ng-container>
+  </mat-form-field>
+
+  <mat-form-field [appearance]="question.appearance" *ngSwitchCase="'radio'">
+    <mat-label>{{ question.label }}</mat-label>
+
+    <inno-radio
+      [formControlName]="question.key"
+      [options]="question.options"
+    ></inno-radio>
+    <mat-hint *ngIf="question.hint">{{ question.hint }}</mat-hint>
+    <ng-container
+      *ngFor="let validation of question.validations"
+      ngProjectAs="mat-error"
+    >
+      <mat-error *ngIf="form.get(question.key).hasError(validation.name)">{{
+        validation.message
+      }}</mat-error>
+    </ng-container>
+  </mat-form-field>
+
+  <mat-form-field *ngSwitchCase="'checkbox'">
+    <mat-label>{{ question.label }}</mat-label>
+
+    <inno-checkbox [formControlName]="question.key"
+      >{{ question.label }}
+    </inno-checkbox>
+    <mat-hint *ngIf="question.hint">{{ question.hint }}</mat-hint>
+    <ng-container
+      *ngFor="let validation of question.validations"
+      ngProjectAs="mat-error"
+    >
+      <mat-error *ngIf="form.get(question.key).hasError(validation.name)">{{
+        validation.message
+      }}</mat-error>
+    </ng-container>
+  </mat-form-field>
+</div>
